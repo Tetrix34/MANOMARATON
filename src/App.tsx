@@ -4,11 +4,15 @@ import { RegistrationForm } from './components/RegistrationForm';
 import { TicketView } from './components/TicketView';
 import { AdminDashboard } from './components/AdminDashboard';
 import { motion, AnimatePresence } from 'motion/react';
+import { initAuth } from './lib/firebase';
+import { appendRegistrationToSheet } from './lib/sheetsService';
 
 export default function App() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [currentView, setCurrentView] = useState<AppView>('form');
   const [activeTicket, setActiveTicket] = useState<Registration | null>(null);
+  const [googleUser, setGoogleUser] = useState<any>(null);
+  const [googleToken, setGoogleToken] = useState<string | null>(null);
 
   // Load registrations from localStorage on component mount
   useEffect(() => {
@@ -20,6 +24,19 @@ export default function App() {
     } catch (e) {
       console.error('Error reading localStorage data', e);
     }
+
+    // Initialize Auth listener
+    const unsubscribe = initAuth(
+      (user, token) => {
+        setGoogleUser(user);
+        setGoogleToken(token);
+      },
+      () => {
+        setGoogleUser(null);
+        setGoogleToken(null);
+      }
+    );
+    return () => unsubscribe();
   }, []);
 
   // Update registrations and save to localStorage
@@ -33,7 +50,7 @@ export default function App() {
   };
 
   // Process user registration submission
-  const handleRegisterSubmit = (data: { fullName: string; phone: string }) => {
+  const handleRegisterSubmit = async (data: { fullName: string; phone: string }) => {
     // Generate unique participant code e.g., MM-3850
     const randomCode = Math.floor(1000 + Math.random() * 9000);
     const uniqueId = `MM-${randomCode}`;
@@ -46,12 +63,34 @@ export default function App() {
       createdAt: new Date().toISOString(),
       ticketNumber: nextTicketNumber,
       checkedIn: false, // Default pending presencial checkin
+      syncedToSheets: false,
     };
 
+    // Save and display the ticket INSTANTLY (Optimistic UI)
     const updatedRegs = [newReg, ...registrations];
     handleSetRegistrations(updatedRegs);
     setActiveTicket(newReg);
     setCurrentView('ticket');
+
+    // Perform direct sync with Google Apps Script Web App in the background (Non-blocking)
+    appendRegistrationToSheet(newReg)
+      .then((success) => {
+        if (success) {
+          setRegistrations(prevRegs => {
+            const updated = prevRegs.map(r => r.id === uniqueId ? { ...r, syncedToSheets: true } : r);
+            try {
+              localStorage.setItem('mano_maraton_registrations', JSON.stringify(updated));
+            } catch (e) {
+              console.error('Error writing background sync to localStorage', e);
+            }
+            return updated;
+          });
+          console.log('Real-time sync to Google Apps Script succeeded in the background!');
+        }
+      })
+      .catch((e) => {
+        console.error('Background Google Apps Script sync failed, marked as unsynced.', e);
+      });
   };
 
   return (
@@ -106,7 +145,67 @@ export default function App() {
                   setCurrentView('form');
                   setActiveTicket(null);
                 }}
+                onExit={() => setCurrentView('exit')}
               />
+            </motion.div>
+          )}
+
+          {currentView === 'exit' && (
+            <motion.div
+              key="exit"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.25 }}
+              className="w-full"
+            >
+              <div className="bg-brand-blue border-3 border-white/20 rounded-[32px] p-8 shadow-2xl text-white text-center relative flex flex-col items-center">
+                {/* Embedded brand visual */}
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg border-3 border-brand-pink mb-5 p-1">
+                  <img
+                    src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143448/images_mk1pkl.jpg"
+                    alt="Camas Florida"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </div>
+                
+                <h3 className="text-2xl font-black uppercase tracking-tight font-display text-brand-yellow mb-2">
+                  ¡Gracias por Participar!
+                </h3>
+                <p className="text-xs text-slate-300 font-bold uppercase tracking-wider mb-6">
+                  Tu registro ha sido guardado exitosamente
+                </p>
+
+                <p className="text-sm font-medium leading-relaxed max-w-xs text-gray-200 mb-8">
+                  Te esperamos en la competencia para ganar una espectacular <span className="text-brand-pink font-bold">Cama Florida</span>. ¡Mucha suerte!
+                </p>
+
+                <div className="flex flex-col gap-3 w-full">
+                  <button
+                    onClick={() => {
+                      setCurrentView('form');
+                      setActiveTicket(null);
+                    }}
+                    className="w-full cursor-pointer bg-brand-yellow text-brand-blue hover:bg-yellow-400 font-black text-xs uppercase tracking-wider rounded-2xl py-3.5 shadow-md hover:shadow-yellow-400/10 transition-all select-none border-2 border-brand-blue"
+                  >
+                    Registrar Nuevo Participante
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      try {
+                        window.location.href = "https://www.google.com";
+                      } catch (e) {
+                        console.error(e);
+                      }
+                    }}
+                    className="w-full cursor-pointer bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider rounded-2xl py-3 transition-all select-none"
+                  >
+                    Salir de la Aplicación
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
 
@@ -123,6 +222,12 @@ export default function App() {
                 registrations={registrations}
                 onBack={() => setCurrentView('form')}
                 onSetRegistrations={handleSetRegistrations}
+                googleUser={googleUser}
+                googleToken={googleToken}
+                onSetGoogleAuth={(user, token) => {
+                  setGoogleUser(user);
+                  setGoogleToken(token);
+                }}
               />
             </motion.div>
           )}

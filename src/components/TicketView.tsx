@@ -1,17 +1,18 @@
 import React from 'react';
 import { Registration } from '../types';
 import { DynamicQRCode, LaCasitaLogo, BedIcon } from './SponsorLogos';
-import { Calendar, Clock, MapPin, Share2, CheckCircle2, ArrowLeft, Printer, AlertTriangle } from 'lucide-react';
+import { Calendar, Clock, MapPin, Share2, CheckCircle2, ArrowLeft, Printer, AlertTriangle, LogOut, UserPlus } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface TicketViewProps {
   registration: Registration;
   onBack: () => void;
+  onExit: () => void;
 }
 
-export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) => {
+export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack, onExit }) => {
   const shareMessage = encodeURIComponent(
-    `¡Ya me registré para ganar una Cama Florida en la Gran Mano Maratón de Almacenes La Casita! Es el 28 de Junio a las 8:00 AM. Mi código de participante es ${registration.id}. ¡Regístrate tú también!`
+    `¡Regístrate tú también a la Gran Mano Maratón de Almacenes La Casita para tener la gran oportunidad de ganar una espectacular Cama Florida de 1 Pillow! El registro es totalmente gratis aquí: ${window.location.origin}`
   );
 
   const handlePrint = () => {
@@ -19,32 +20,16 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) 
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
-      {/* Back button */}
-      <div>
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-all cursor-pointer bg-white/5 px-4 py-2.5 rounded-xl border border-white/5 hover:border-white/10"
-          id="btn-ticket-back"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver al Registro</span>
-        </button>
-      </div>
+    <div className="w-full max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
 
       {/* Floating Sparkle Animation banner */}
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-green-500/10 border border-green-500/20 rounded-3xl p-4 flex items-center gap-4 text-left"
+        className="bg-green-500/10 border border-green-500/20 rounded-3xl p-4 flex items-center justify-center gap-2.5 text-center"
       >
-        <div className="p-3 bg-green-500/20 rounded-2xl text-green-400">
-          <CheckCircle2 className="w-6 h-6" />
-        </div>
-        <div>
-          <h4 className="text-sm font-bold text-white">¡Registro Completado con Éxito!</h4>
-          <p className="text-xs text-gray-400">Tu boleto digital ha sido generado. Guarda una captura o imprímelo.</p>
-        </div>
+        <CheckCircle2 className="w-5 h-5 text-green-400" />
+        <h4 className="text-sm font-black uppercase tracking-wider text-white">¡REGISTRO EXITOSO!</h4>
       </motion.div>
 
       {/* TICKET CONTAINER (The Ticket has left/right notch cuts styled with CSS) */}
@@ -56,10 +41,7 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) 
           {/* Header branding */}
           <div className="flex justify-between items-start gap-4">
             <div className="text-left">
-              <span className="text-[10px] bg-brand-red/10 text-brand-red font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                Boleto Oficial de Participación
-              </span>
-              <h2 className="text-2xl font-black text-brand-blue tracking-tight uppercase leading-none mt-2 font-display">
+              <h2 className="text-2xl font-black text-brand-blue tracking-tight uppercase leading-none mt-1 font-display">
                 Mano Maratón
               </h2>
               <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mt-1">
@@ -71,30 +53,22 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) 
 
           <div className="border-t border-dashed border-gray-300 my-4" />
 
-          {/* Ticket Details Grid */}
-          <div className="grid grid-cols-2 gap-4 text-left mb-4">
-            <div>
-              <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider">Participante</p>
-              <p className="text-sm font-extrabold text-brand-blue truncate uppercase mt-0.5">{registration.fullName}</p>
+          {/* Ticket Details - Participant and Phone highlighted */}
+          <div className="space-y-3.5 text-left mb-4">
+            <div className="bg-[#FAF8F5] border-2 border-brand-blue/10 rounded-2xl p-4 shadow-sm">
+              <p className="text-[10px] text-brand-pink font-black uppercase tracking-widest leading-none">PARTICIPANTE</p>
+              <p className="text-xl font-black text-brand-blue mt-2 uppercase leading-tight">{registration.fullName}</p>
             </div>
-            <div>
-              <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider">No. Teléfono</p>
-              <p className="text-sm font-bold text-slate-800 font-mono mt-0.5">{registration.phone}</p>
-            </div>
-            <div>
-              <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider">Código ID Único</p>
-              <p className="text-sm font-extrabold text-brand-red font-mono tracking-tight mt-0.5">{registration.id}</p>
-            </div>
-            <div>
-              <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider">Número de Registro</p>
-              <p className="text-sm font-extrabold text-slate-800 font-mono mt-0.5">#{registration.ticketNumber}</p>
+            <div className="bg-[#FAF8F5] border-2 border-brand-blue/10 rounded-2xl p-4 shadow-sm">
+              <p className="text-[10px] text-[#FF8A00] font-black uppercase tracking-widest leading-none">TELÉFONO DE CONTACTO</p>
+              <p className="text-lg font-black text-slate-800 font-mono mt-2">{registration.phone}</p>
             </div>
           </div>
 
           {/* SPECIFICATIONS LIST (Compact) */}
           <div className="bg-[#FAF8F5] border border-gray-100 rounded-2xl p-3.5 space-y-2.5 text-left mb-6">
             <div className="flex items-center gap-2.5 text-xs text-gray-700">
-              <MapPin className="w-4 h-4 text-brand-red shrink-0" />
+              <MapPin className="w-4 h-4 text-[#EC008C] shrink-0" />
               <div className="leading-tight">
                 <strong className="text-brand-blue font-bold text-[11px]">Sucursal Almacenes La Casita:</strong>
                 <p className="text-[10px] text-gray-500 font-medium">Santa María de Jesús (A la par de Pollo Pinulito)</p>
@@ -108,7 +82,7 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) 
 
             <div className="flex items-center gap-2.5 text-xs text-gray-700">
               <Clock className="w-4 h-4 text-yellow-600 shrink-0" />
-              <span className="text-[10px] font-bold text-gray-600">8:00 AM (Se solicita estar 30 min antes)</span>
+              <span className="text-[10px] font-bold text-gray-600">8:00 AM (Se solicita estar 15 min antes)</span>
             </div>
           </div>
 
@@ -122,44 +96,63 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack }) 
             <div className="w-full border-t border-2 border-dashed border-gray-300" />
           </div>
 
-          {/* Bottom segment: Large QR code */}
-          <div className="flex flex-col items-center justify-center p-4 mt-2">
-            <DynamicQRCode value={registration.id} className="w-36 h-36 border border-gray-100 p-2 bg-white rounded-xl shadow-sm" />
-            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-3">Escanear el día del evento</p>
+          {/* Bottom segment: Image of the Bed in place of QR Code */}
+          <div className="flex flex-col items-center justify-center p-3 mt-2">
+            <div className="w-56 h-36 flex items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-white p-2 shadow-sm">
+              <img
+                src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143415/1744572362Continental-STD-1-Pillow_ado4y9.png"
+                alt="Cama Continental Plus"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <p className="text-[10px] text-[#EC008C] font-black uppercase tracking-widest mt-3">¡Cama Continental Plus de 1 Pillow!</p>
           </div>
 
-          {/* Important reminder warning */}
-          <div className="bg-amber-50 rounded-2xl p-3 border border-amber-200/55 flex gap-2.5 items-start text-left mt-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <div className="text-[10px] text-amber-800 leading-normal font-medium">
-              <p className="font-bold uppercase tracking-wider">⚠️ REGLA CRÍTICA DE ASISTENCIA</p>
-              Debes llegar antes de la hora indicada con este boleto digital. Si la competencia inicia, no se permitirán inscripciones tardías de último minuto.
-            </div>
-          </div>
+
 
         </div>
       </div>
 
-      {/* Share / PDF Action tools */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* Share Action tools */}
+      <div className="flex flex-col gap-3.5">
         <a
           href={`https://api.whatsapp.com/send?text=${shareMessage}`}
           target="_blank"
           referrerPolicy="no-referrer"
           rel="noopener noreferrer"
-          className="flex-1 cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold text-sm rounded-2xl px-5 py-3.5 flex items-center justify-center gap-2 shadow-lg hover:shadow-green-500/10 transition-all"
+          className="w-full cursor-pointer bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-sm uppercase tracking-wider rounded-2xl px-5 py-4 flex flex-col items-center justify-center text-center gap-1.5 shadow-lg shadow-green-500/10 transition-all select-none"
+          id="btn-whatsapp-share"
         >
-          <Share2 className="w-4 h-4" />
-          <span>Compartir en WhatsApp</span>
+          <div className="flex items-center gap-2">
+            <Share2 className="w-5 h-5 shrink-0" />
+            <span>Compartir en WhatsApp</span>
+          </div>
+          <span className="text-[11px] font-bold text-white/90 normal-case tracking-normal leading-tight">
+            ¡Comparte con tus conocidos para que se registren y ganen una Cama Florida!
+          </span>
         </a>
 
-        <button
-          onClick={handlePrint}
-          className="flex-1 cursor-pointer bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-sm rounded-2xl px-5 py-3.5 flex items-center justify-center gap-2 transition-all"
-        >
-          <Printer className="w-4 h-4" />
-          <span>Imprimir / PDF</span>
-        </button>
+        {/* Dynamic Navigation Actions: Register New & Exit */}
+        <div className="grid grid-cols-2 gap-3 mt-0.5">
+          <button
+            onClick={onBack}
+            className="w-full cursor-pointer bg-brand-yellow hover:bg-yellow-400 text-brand-blue font-black text-xs uppercase tracking-wider rounded-2xl py-3.5 px-3 flex items-center justify-center gap-1.5 shadow-md hover:shadow-yellow-400/10 transition-all select-none border-2 border-brand-blue"
+            id="btn-ticket-register-another"
+          >
+            <UserPlus className="w-4 h-4 shrink-0" />
+            <span>Registrar Nuevo</span>
+          </button>
+
+          <button
+            onClick={onExit}
+            className="w-full cursor-pointer bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl py-3.5 px-3 flex items-center justify-center gap-1.5 shadow-md hover:shadow-red-600/10 transition-all select-none"
+            id="btn-ticket-exit"
+          >
+            <LogOut className="w-4 h-4 shrink-0" />
+            <span>Salir</span>
+          </button>
+        </div>
       </div>
 
       <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider text-center mt-2">

@@ -6,9 +6,10 @@ export interface Registration {
   ticketNumber: number; // Incrementing ticket order
   checkedIn: boolean; // For organizer check-in tracking
   notes?: string;
+  syncedToSheets?: boolean; // Tracking if synced to Google Sheets
 }
 
-export type AppView = 'form' | 'ticket' | 'admin';
+export type AppView = 'form' | 'ticket' | 'admin' | 'exit';
 
 export interface EventDetails {
   title: string;
