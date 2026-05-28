@@ -49,6 +49,15 @@ export default function App() {
     }
   };
 
+  // Scroll to the top of the page automatically on view change
+  useEffect(() => {
+    try {
+      window.scrollTo(0, 0);
+    } catch (e) {
+      console.error('Error scrolling to top', e);
+    }
+  }, [currentView]);
+
   // Process user registration submission
   const handleRegisterSubmit = async (data: { fullName: string; phone: string }) => {
     // Generate unique participant code e.g., MM-3850
@@ -94,7 +103,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-brand-yellow text-slate-900 flex flex-col justify-center items-center selection:bg-brand-pink selection:text-white selection:font-bold overflow-hidden">
+    <div className="relative min-h-screen bg-brand-yellow text-slate-900 flex flex-col justify-center items-center selection:bg-brand-pink selection:text-white selection:font-bold overflow-x-hidden">
       {/* High-fidelity replica of the flyer yellow/teal background */}
       {/* Lower Teal Section with skewed cut */}
       <div 
