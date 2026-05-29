@@ -187,7 +187,7 @@ export default function App() {
                 </p>
 
                 <p className="text-sm font-medium leading-relaxed max-w-xs text-gray-200 mb-8">
-                  Te esperamos en la competencia para ganar una espectacular <span className="text-brand-pink font-bold">Cama Florida</span>. ¡Mucha suerte!
+                  Te esperamos en la competencia para ganar una espectacular <span className="text-brand-pink font-bold">Cama Continental 1 Pillow</span>. ¡Mucha suerte!
                 </p>
 
                 <div className="flex flex-col gap-3 w-full">

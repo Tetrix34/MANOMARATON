@@ -6,7 +6,7 @@ export const BedIcon: React.FC<{ className?: string }> = ({ className = 'w-16 h-
     <div className={`relative rounded-full border-3 border-brand-blue bg-white flex items-center justify-center overflow-hidden p-1 shadow-sm ${className}`}>
       <img
         src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143415/1744572362Continental-STD-1-Pillow_ado4y9.png"
-        alt="Cama Continental Plus"
+        alt="Cama Continental 1 Pillow"
         referrerPolicy="no-referrer"
         className="w-full h-full object-contain rounded-full"
       />

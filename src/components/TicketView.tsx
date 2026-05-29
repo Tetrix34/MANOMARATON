@@ -12,7 +12,7 @@ interface TicketViewProps {
 
 export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack, onExit }) => {
   const shareMessage = encodeURIComponent(
-    `¡Regístrate tú también a la Gran Mano Maratón de Almacenes La Casita para tener la gran oportunidad de ganar una espectacular Cama Florida de 1 Pillow! El registro es totalmente gratis aquí: ${window.location.origin}`
+    `¡Regístrate tú también a la Gran Mano Maratón de Almacenes La Casita para tener la gran oportunidad de ganar una espectacular Cama Continental 1 Pillow! El registro es totalmente gratis aquí: ${window.location.origin}`
   );
 
   const handlePrint = () => {
@@ -101,12 +101,12 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack, on
             <div className="w-56 h-36 flex items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-white p-2 shadow-sm">
               <img
                 src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143415/1744572362Continental-STD-1-Pillow_ado4y9.png"
-                alt="Cama Continental Plus"
+                alt="Cama Continental 1 Pillow"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-contain"
               />
             </div>
-            <p className="text-[10px] text-[#EC008C] font-black uppercase tracking-widest mt-3">¡Cama Continental Plus de 1 Pillow!</p>
+            <p className="text-[10px] text-[#EC008C] font-black uppercase tracking-widest mt-3">¡Cama Continental 1 Pillow!</p>
           </div>
 
 
@@ -129,7 +129,7 @@ export const TicketView: React.FC<TicketViewProps> = ({ registration, onBack, on
             <span>Compartir en WhatsApp</span>
           </div>
           <span className="text-[11px] font-bold text-white/90 normal-case tracking-normal leading-tight">
-            ¡Comparte con tus conocidos para que se registren y ganen una Cama Florida!
+            ¡Comparte con tus conocidos para que se registren y ganen una Cama Continental 1 Pillow!
           </span>
         </a>
 

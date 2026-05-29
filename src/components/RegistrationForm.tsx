@@ -90,7 +90,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <div className="w-full h-full rounded-full border border-gray-100 flex items-center justify-center overflow-hidden bg-white">
               <img
                 src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143415/1744572362Continental-STD-1-Pillow_ado4y9.png"
-                alt="Cama Continental Plus"
+                alt="Cama Continental 1 Pillow"
                 referrerPolicy="no-referrer"
                 className="w-[90%] h-[90%] object-contain"
               />
@@ -233,7 +233,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <div className="w-12 h-12 rounded-full border-2 border-brand-blue bg-white flex items-center justify-center overflow-hidden">
               <img
                 src="https://res.cloudinary.com/dbc6tihw1/image/upload/v1772143415/1744572362Continental-STD-1-Pillow_ado4y9.png"
-                alt="Cama Continental Plus"
+                alt="Cama Continental 1 Pillow"
                 referrerPolicy="no-referrer"
                 className="w-[90%] h-[90%] object-contain"
               />
